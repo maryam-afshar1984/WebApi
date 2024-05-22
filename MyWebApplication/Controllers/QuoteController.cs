@@ -34,7 +34,7 @@ namespace MyWebApplication.Controllers
             return StatusCode(HttpStatusCode.Created);
         }
 
-        // PUT: api/Quote/5
+        // PUT: api/Quote/id
         public void Put(int id, [FromBody]Quote quote)
         {
             var entity = myDbContext.Quotes.FirstOrDefault(q => q.Id == id);

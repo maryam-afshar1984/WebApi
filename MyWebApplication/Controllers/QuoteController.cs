@@ -2,6 +2,7 @@
 using MyWebApplication.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Metadata;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -20,10 +21,14 @@ namespace MyWebApplication.Controllers
         }
 
         // GET: api/Quote/Id
-        public Quote Get(int id)
+        public IHttpActionResult Get(int id)
         {
             var quote = myDbContext.Quotes.Find(id);
-            return quote;
+            if (quote == null)
+            {
+                return NotFound();
+            }
+            return Ok(quote);
         }
 
         // POST: api/Quote
@@ -35,21 +40,33 @@ namespace MyWebApplication.Controllers
         }
 
         // PUT: api/Quote/id
-        public void Put(int id, [FromBody]Quote quote)
+        public IHttpActionResult Put(int id, [FromBody]Quote quote)
         {
             var entity = myDbContext.Quotes.FirstOrDefault(q => q.Id == id);
+            if (entity == null)
+            {
+                return BadRequest("No record found against this Id!");
+            }
             entity.Title = quote.Title;
             entity.Description = quote.Description;
             entity.Author = quote.Author;
             myDbContext.SaveChanges();
+            return Ok("Record updated successfully...");
+
         }
 
         // DELETE: api/Quote/5
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
             var quote = myDbContext.Quotes.Find(id) ;
+            if (quote == null)
+            {
+                return BadRequest("No record found against this Id!");// we can also return NotFound() method.
+
+            }
             myDbContext.Quotes.Remove(quote);
             myDbContext.SaveChanges() ;
+            return Ok("Quote deleted successfully...");
 
         }
     }

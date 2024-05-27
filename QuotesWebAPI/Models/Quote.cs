@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace MyWebApplication.Models
+namespace QuotesWebAPI.Models
 {
     public class Quote
     {
@@ -27,6 +27,8 @@ namespace MyWebApplication.Models
 
         [Required]
         public DateTime CreateAt { get; set; }
+
+        public string UserId { get; set; }
 
     }
 }

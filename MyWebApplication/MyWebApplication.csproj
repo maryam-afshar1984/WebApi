@@ -201,6 +201,23 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202405221256164_InitialCreate.cs" />
+    <Compile Include="Migrations\202405221256164_InitialCreate.Designer.cs">
+      <DependentUpon>202405221256164_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202405231418029_QuoteTypeAdd.cs" />
+    <Compile Include="Migrations\202405231418029_QuoteTypeAdd.Designer.cs">
+      <DependentUpon>202405231418029_QuoteTypeAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202405231426136_QuoteDateAdd.cs" />
+    <Compile Include="Migrations\202405231426136_QuoteDateAdd.Designer.cs">
+      <DependentUpon>202405231426136_QuoteDateAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202405231453469_ValidationAdded.cs" />
+    <Compile Include="Migrations\202405231453469_ValidationAdded.Designer.cs">
+      <DependentUpon>202405231453469_ValidationAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Quote.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -216,6 +233,20 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202405221256164_InitialCreate.resx">
+      <DependentUpon>202405221256164_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202405231418029_QuoteTypeAdd.resx">
+      <DependentUpon>202405231418029_QuoteTypeAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202405231426136_QuoteDateAdd.resx">
+      <DependentUpon>202405231426136_QuoteDateAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202405231453469_ValidationAdded.resx">
+      <DependentUpon>202405231453469_ValidationAdded.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,21 +1,26 @@
-﻿using MyWebApplication.Data;
-using MyWebApplication.Models;
+﻿using Microsoft.AspNet.Identity;
+using QuotesWebAPI.Models;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Metadata;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WebApi.OutputCache.V2;
 
-namespace MyWebApplication.Controllers
+namespace QuotesWebAPI.Controllers
 {
+    //everything will be protected with adding Authorize attribute
+    [Authorize]
     public class QuoteController : ApiController
     {
-        MyDbContext myDbContext = new MyDbContext();
+        ApplicationDbContext myDbContext = new ApplicationDbContext();
 
         // GET: api/Quote
+        [AllowAnonymous] // with adding this we allow everyone without authentication and autorization have access to all list of quotes
         [HttpGet]
+        [CacheOutput(ClientTimeSpan =60,ServerTimeSpan=60)]
+
         public IHttpActionResult LoadQuotes(String sort)
         {
             IQueryable<Quote> quotes;
@@ -32,6 +37,16 @@ namespace MyWebApplication.Controllers
                     break;
             }
             return Ok(quotes);
+        }
+
+        [HttpGet]
+        [Route("api/quote/PagingQuote/MyQuotes")]
+        public IHttpActionResult MyQuotes()
+        {
+            string userId = User.Identity.GetUserId();
+
+            var quote = myDbContext.Quotes.Where(q => q.UserId==userId);
+            return Ok(quote);
         }
 
         [HttpGet]
@@ -72,6 +87,9 @@ namespace MyWebApplication.Controllers
         // POST: api/Quote
         public IHttpActionResult Post([FromBody]Quote quote)
         {
+            string userId = User.Identity.GetUserId();
+            quote.UserId = userId;
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -90,10 +108,19 @@ namespace MyWebApplication.Controllers
             }
 
             var entity = myDbContext.Quotes.FirstOrDefault(q => q.Id == id);
+            
             if (entity == null)
             {
                 return BadRequest("No record found against this Id!");
             }
+
+            string userId = User.Identity.GetUserId();
+
+            if (userId != entity.UserId)
+            {
+                return BadRequest("You don't have right to update this record!!!");
+            }
+
             entity.Title = quote.Title;
             entity.Description = quote.Description;
             entity.Author = quote.Author;
@@ -111,6 +138,14 @@ namespace MyWebApplication.Controllers
                 return BadRequest("No record found against this Id!");// we can also return NotFound() method.
 
             }
+
+            string userId = User.Identity.GetUserId();
+
+            if (userId != quote.UserId)
+            {
+                return BadRequest("You don't have any right to delete this record!!!");
+            }
+
             myDbContext.Quotes.Remove(quote);
             myDbContext.SaveChanges() ;
             return Ok("Quote deleted successfully...");
